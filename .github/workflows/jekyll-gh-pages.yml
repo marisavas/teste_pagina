@@ -35,17 +35,28 @@ jobs:
       - name: Setup Ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: '3.3.4'
+          bundler: 'Gemfile.lock'
           bundler-cache: true
           cache-version: 0
           
+      - name: Cache gems
+        uses: actions/cache@v3
+        with:
+          path: vendor/bundle
+          key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-gems-   
+            
       - name: Install dependencies
         run: |
-          bundle config path vendor/bundle
+          bundle config --path vendor/bundle
           bundle install --jobs 4 --retry 3
         env:
           BUNDLER_VERSION: $(grep -A 1 'BUNDLED WITH' Gemfile.lock | tail -n 1)
-  
+      - name: Setup Pages
+        id: pages
+        uses: actions/configure-pages@main
+        
       - name: Build with Jekyll
         run: bundle exec jekyll build --baseurl "/teste_pagina"
 
@@ -55,6 +66,8 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./_site  # Directory where Jekyll builds the site
           target_branch: gh-pages
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@main
 
   # Deployment job
   deploy:
