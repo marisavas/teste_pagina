@@ -5,10 +5,10 @@ on:
   # Runs on pushes targeting the default branch
   push:
     branches:
-      - main
+      - build
   pull_request:
     branches:
-      - main
+      - build
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
@@ -39,44 +39,27 @@ jobs:
           bundler-cache: true
           cache-version: 0
           
-      - name: Cache gems
-        uses: actions/cache@v3
-        with:
-          path: vendor/bundle
-          key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-gems-   
-            
-      - name: Install dependencies
-        run: |
-          bundle config path vendor/bundle
-          bundle install --jobs 4 --retry 3
-        env:
-          BUNDLER_VERSION: $(grep -A 1 'BUNDLED WITH' Gemfile.lock | tail -n 1)
       - name: Setup Pages
         id: pages
-        uses: actions/configure-pages@main
-        
-      - name: Build with Jekyll
-        run: bundle exec jekyll build --baseurl "/teste_pagina"
+        uses: actions/configure-pages@v5
 
-      - name: Deploy to git pages
+  deploy:
+    needs: build
+    runs-on: macos-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          ref: gh-pages
+        
+      - name: Deploy to github pages
         uses: peaceiris/actions-gh-pages@v3
         with: 
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./_site  # Directory where Jekyll builds the site
+          publish_dir: ./_site  
           target_branch: gh-pages
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@main
+         
+            
+     
 
-  # Deployment job
-  deploy:
-    environment:
-      name: github-pages
-    runs-on: macos-latest
-    needs: build
-    steps:
-      - name: Deploy to GitHub Pages
-        uses: actions/deploy-pages@v1
-        with:
-          path: ./_site
+
