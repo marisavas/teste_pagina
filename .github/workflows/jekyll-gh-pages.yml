@@ -42,11 +42,19 @@ jobs:
       - name: Setup Ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: 3.3.4
+          cache-version: 0
           bundler-cache: true
+          bundler: "Gemfile.lock"
+          
+      - name: Setup Pages
+        id: pages
+        uses: actions/configure-pages@main
+          ruby-version:'3.3.4'    
           
       - name: Install dependences
-        run: bundle install --path vendor/bundle
+        run: | 
+          gem install bundler
+          bundle install 
           
       
       - name: Build with Jekyll
@@ -58,6 +66,13 @@ jobs:
         uses: actions/upload-pages-artifact@v1
         with: 
           path: ./_site
+          
+      - name: Deploy to git pages
+        uses: peaceiris/actions-gh-pages@v3
+        with: 
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./_site  # Directory where Jekyll builds the site
+          target_branch: gh-pages  # Specify the branch to deploy to     
 
   # Deployment job
   deploy:
