@@ -96,8 +96,9 @@ PLATFORMS
 DEPENDENCIES
   base64
   csv
-  jekyll
-  jekyll-scholar
+  jekyll (~> 4.3.3)
+  jekyll-sass-converter (~> 3.0.0)
+  jekyll-scholar (~> 7.1.3)
   observer
 
 RUBY VERSION
