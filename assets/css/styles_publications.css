@@ -1,0 +1,117 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  line-height: 1.6;
+}
+
+header {
+  background-color: #f4f4f4;
+  padding: 10px 0;  
+  display: flex;
+  flex-direction: column;
+}
+
+.name h1 {
+  margin: 0;
+  font-size: 32px;
+  color:#333;
+  font-weight: bold;;
+}
+
+nav.links {
+  display: flex;
+  gap: 15px;
+  justify-content: center !important;
+  margin-top: 12px; 
+}
+
+nav.links a {
+  text-decoration: none;
+  color: #666;
+  font-size: 16px;
+  transition: color 0.3s; /* Smooth color transition on hover */
+}
+
+nav.links a:hover {
+  color: #007bff; /* Darker gray on hover for better contrast */
+}
+
+
+.container_header {
+  margin-right: auto !important;
+  margin-bottom: auto !important;
+  margin: 0 auto; /*Auto margin left and right to center content */
+}
+
+
+.bottom-three {
+  margin-bottom: 5px;
+  margin-top: 7px;
+}
+
+ol.bibliography li {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+ol.bibliography li:before {
+  content: "";
+}
+
+button {
+  font-size: 14px;
+}
+
+.my_text {
+  font-size: 14px;
+}
+
+.leftcell {
+  float: left;
+  text-align: right;
+}
+
+.rightcell {
+  float: left;
+  text-align: left;
+  font-size: 14px;
+  padding-left: 5px; /* Fake cell padding */
+}
+
+.font_bib {
+  font-family: "Open Sans", Helvetica Neue, Helvetica, Arial, sans-serif;
+  font-size: 15px;
+  line-height: 28px;
+  color: #404040;
+}
+
+th, td {
+  text-align: left;
+  padding: 5px 10px;
+  border-bottom: 1px solid #e5e5e5;
+}
+
+h4 {
+  color: #494949;
+  font-size: 20px;
+  font-family: "Volkhov", "Times New Roman", Times, serif;
+  font-weight: 400;
+  line-height: initial;
+  position: relative;
+  left: 86px;
+}
+
+tbody > tr:last-child > td {
+  border-bottom: 0;
+}
+
+.c-wrap-content {
+  position: absolute;
+  top: 150px;
+}
