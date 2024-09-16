@@ -19,12 +19,26 @@
  <link rel="stylesheet" href="{{ site.baseurl }}/public/css/styles_index.css">
  <link rel="stylesheet" href="{{ site.baseurl }}/public/css/styles_publications.css">
  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-
+ 
+<!-- 
 {% if page.custom_css %}
     {% for stylesheet in page.custom_css %}
     <link rel="stylesheet" href="{{ site.baseurl }}/public/css/{{ stylesheet }}.css">
     {% endfor %}
- {% endif %}
+ {% endif %} -->
+
+<!-- Google Analytics -->
+{% if site.google_analytics %}
+  <script async src="https://www.googletagmanager.com/gtag/js?id={{ site.google_analytics }}"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', '{{ site.google_analytics }}');
+  </script>
+{% endif %}
+<!-- End Google Analytics --> 
 
 
 </head>
