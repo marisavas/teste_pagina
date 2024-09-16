@@ -41,7 +41,7 @@ jobs:
           bundle config path vendor/bundle
           bundle install --jobs 4 --retry 3
         env:
-          BUNDLER_VERSION: 2.4.19  # Ensures you use the correct bundler version
+          BUNDLER_VERSION: 2.5.11  # Ensures you use the correct bundler version
     
       - name: Build with Jekyll
         run: bundle exec jekyll build --baseurl "/teste_pagina"
