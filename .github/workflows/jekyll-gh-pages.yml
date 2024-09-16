@@ -4,10 +4,11 @@ name: Deploy Jekyll with GitHub Pages dependencies preinstalled
 on:
   # Runs on pushes targeting the default branch
   push:
-    branches: ["main"]
+    branches:
+      - main
   pull_request:
-    branches: ["main"]
-    
+    branches:
+      - main
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
@@ -29,32 +30,44 @@ jobs:
     runs-on: macos-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@main
-      - name: Cache Ruby gems
+        uses: actions/checkout@v3
+        
+      - name: Setup Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          bundler: 'Gemfile.lock'
+          bundler-cache: true
+          cache-version: 0
+          
+      - name: Cache gems
         uses: actions/cache@v3
         with:
           path: vendor/bundle
-          key: ${{ runner.os }}-bundler-cache-v2-${{ hashFiles('**/Gemfile.lock') }}
+          key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
           restore-keys: |
-            ${{ runner.os }}-bundler-cache-v2-  
-      - name: Setup Ruby
-        uses: ruby/setup-ruby@v2
-        with:
-          ruby-version: '3.3.4'
+            ${{ runner.os }}-gems-   
+            
       - name: Install dependencies
         run: |
-          gem install bundler
-          bundle install 
+          bundle config --path vendor/bundle
+          bundle install --jobs 4 --retry 3
+        env:
+          BUNDLER_VERSION: $(grep -A 1 'BUNDLED WITH' Gemfile.lock | tail -n 1)
+      - name: Setup Pages
+        id: pages
+        uses: actions/configure-pages@main
+        
       - name: Build with Jekyll
         run: bundle exec jekyll build --baseurl "/teste_pagina"
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@main
+
       - name: Deploy to git pages
         uses: peaceiris/actions-gh-pages@v3
         with: 
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./_site  # Directory where Jekyll builds the site
-          target_branch: gh-pages  # Specify the branch to deploy to     
+          target_branch: gh-pages
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@main
 
   # Deployment job
   deploy:
