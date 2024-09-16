@@ -30,35 +30,25 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-        
-      - name: Cache Ruby gems
-        uses: actions/cache@v3
-        with:
-          path: vendor/bundle
-          key: ${{ runner.os }}-bundler-cache-v2-${{ hashFiles('**/Gemfile.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-bundler-cache-v2-  
-            
+      
       - name: Setup Ruby
         uses: ruby/setup-ruby@v1
         with:
-          cache-version: 0
+          ruby-version: '3.3.4'
           bundler-cache: true
-          bundler: "Gemfile.lock"
-          
+          cache-version: 0
       - name: Setup Pages
         id: pages
-        uses: actions/configure-pages@main
-          ruby-version:'3.3.4'    
-          
-      - name: Install dependences
-        run: | 
-          gem install bundler
-          bundle install 
-          
+        uses: actions/configure-pages@v5    
+      - name: Use Ruby and Bundler version from Gemfile.lock
+        run: |
+          bundle config path vendor/bundle
+          bundle install --jobs 4 --retry 3
+        env:
+          BUNDLER_VERSION: 2.4.19 # Set the desired Bundler version
       
       - name: Build with Jekyll
-        run: bundle exec jekyll build --destination ./_site
+        run: bundle exec jekyll build --baseurl "${{ steps.pages.outputs.base_path }}"
         env: 
           JEKYLL_ENV: production
         
