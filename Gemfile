@@ -3,7 +3,7 @@ source 'https://rubygems.org'
 ruby '3.3.4'
 
 gem "jekyll", "~> 4.0"
-gem "jekyll-scholar", "7.1.3"
+gem "jekyll-scholar", "~> 7.1.3"
 gem "jekyll-sass-converter", "3.0.0"
 gem "mercenary", "0.4.0"
 gem "rouge", "4.3.0"
