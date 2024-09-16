@@ -49,7 +49,7 @@ jobs:
             
       - name: Install dependencies
         run: |
-          bundle config --path vendor/bundle
+          bundle config path vendor/bundle
           bundle install --jobs 4 --retry 3
         env:
           BUNDLER_VERSION: $(grep -A 1 'BUNDLED WITH' Gemfile.lock | tail -n 1)
