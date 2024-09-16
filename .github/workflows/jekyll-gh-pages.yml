@@ -5,10 +5,10 @@ on:
   # Runs on pushes targeting the default branch
   push:
     branches:
-      - gh-pages
+      - main
   pull_request:
     branches:
-      - gh-pages
+      - main
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
@@ -62,7 +62,7 @@ jobs:
         with: 
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./_site  # Directory where Jekyll builds the site
-         
+          target_branch: gh-pages
 
   # Deployment job
   deploy:
