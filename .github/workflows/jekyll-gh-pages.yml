@@ -29,7 +29,8 @@ jobs:
     runs-on: macos-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@main
+        uses: actions/checkout@v3
+        
       - name: Cache Ruby gems
         uses: actions/cache@v3
         with:
@@ -37,34 +38,26 @@ jobs:
           key: ${{ runner.os }}-bundler-cache-v2-${{ hashFiles('**/Gemfile.lock') }}
           restore-keys: |
             ${{ runner.os }}-bundler-cache-v2-  
-      - name: Configure Ruby
+            
+      - name: Setup Ruby
         uses: ruby/setup-ruby@v1
         with:
-          bundle-cache: true
-          cache-version: 0
-          bundler: "Gemfile.lock"
-      - name: Cache gems
-        uses: actions/cache@v3
-        with:
-          path: vendor/bundle
-          key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-gems-
+          ruby-version: 3.3.4
+          bundler-cache: true
+          
       - name: Install dependences
         run: bundle install --path vendor/bundle
-      - name: Setup Pages
-        id: pages
-        uses: actions/configure-pages@main
+          
+      
       - name: Build with Jekyll
-        run: bundle exec jekyll build --baseurl "${{ steps.pages.outputs.base_path }}"
+        run: bundle exec jekyll build --destination ./_site
         env: 
           JEKYLL_ENV: production
-        # uses: actions/jekyll-build-pages@v1
-        #with:
-          #source: ./
-          #destination: ./_site
+        
       - name: Upload artifact
-        uses: actions/upload-pages-artifact@main
+        uses: actions/upload-pages-artifact@v1
+        with: 
+          path: ./_site
 
   # Deployment job
   deploy:
@@ -76,4 +69,6 @@ jobs:
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@main
+        uses: actions/deploy-pages@v1
+        with:
+          path: ./_site
