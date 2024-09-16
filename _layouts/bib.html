@@ -1,0 +1,40 @@
+---
+---
+
+<script>
+function toggleBibtex{{entry.key}}(parameter) {
+    var x= document.getElementById('a{{entry.key}}');
+    if (x.style.display === 'none') {
+        x.style.display = 'block';
+    } else {
+        x.style.display = 'none';
+    }
+}
+</script>
+
+{% if entry.series %}
+
+    <div class="publication-item">
+        <!-- Authors -->
+        {% for author in entry.author_array %}
+            {{ author.first }} {{ author.last }}{% unless forloop.last %},{% endunless %}
+        {% endfor %}
+        :
+
+        <!-- Title -->
+        <strong>{{ entry.title }}</strong>.
+
+        <!-- Series (Venue), Month, Year -->
+        In: <i>{{ entry.series }}</i>, {{ entry.month_string }} {{ entry.year }}.
+    </div>
+        
+
+    {% else %} 
+    {{entry.date}}
+    {% for author in entry.author_array %}
+        {{ author.first }} {{ author.last }}{% unless forloop.last %},{% endunless %}{% if forloop.last %}.{% endif%}
+    {% endfor %}
+    <b>{{ entry.title }}</b>. {{ entry.month_string }} {{ entry.year }}, {{entry.note}}.<br>
+
+{% endif %}
+

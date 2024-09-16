@@ -1,50 +1,48 @@
+locale: "en"
+lang: "en-us"
 repository: marisavas/marisavas.github.io/teste_pagina
-baseurl: "" # the subpath of your site, e.g. /blog
 title: "Marisa Vasconcelos" # the name of your site, e.g. ACME Corp.
 description: >- # this means to ignore newlines until "baseurl:"
    Marisa Vasconcelos site.
-domain: marisavas.github.io/teste_pagina
-url: https://marisavas.github.io/teste_pagina  # the base hostname and protocol for your site, e.g. http://example.com
+# domain: marisavas.github.io/teste_pagina
+url: "https://marisavas.github.com"  # the base hostname and protocol for your site, e.g. http://example.com
+baseurl: "/teste_pagina" # the subpath of your site, e.g. /blog
 
 permalink: '/:title/'
 
 
-
-
-plugins:
-  - jekyll-scholar
-
-# baseurl: "" # the subpath of your site, e.g. /blog
-
-scholar:
-  bibliography: "bibliography/sample.bib"
-
-font-awesome:
-  assets: true
-
-include:
-  - _pages
-
-sass:
-  sass_dir: _sass
-  style: compressed
 exclude:
   - Gemfile
   - Gemfile.lock
   - vendor
+  
+collections:
+  pages:
+    output: true
+    permalink: /:path/
+
+plugins:
+  - jekyll-scholar
+
+scholar:
+  style: _bibliography/springer-lecture-notes-in-computer-science2.csl
+  bibliography: "bibliography/sample.bib"
+  repository: /publications
+  locale: en
+  # source: ./_bibliography
+  bibliography_template: bib
+  query: "@*"
+  sort_by: year, month
+  order: descending, descending
+  replace_strings: true
+  join_strings: true
 
 
+font-awesome:
+  assets: true
 
-  # scholar:
-  #   style: _bibliography/springer-lecture-notes-in-computer-science2.csl
-  #   locale: en
-  #   source: ./_bibliography
-  #   bibliography_template: bib
-  #   query: "@*"
-  #   sort_by: year, month
-  #   order: descending, descending
-  #   # group_by: none
-  #   # group_order: descending
-  #   repository: /publications
-  #   replace_strings: true
-  #   join_strings: true
+sass:
+  sass_dir: _sass
+  style: compressed
+
+ 
