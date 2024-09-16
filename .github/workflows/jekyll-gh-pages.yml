@@ -38,29 +38,41 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-bundler-cache-v2-  
       - name: Configure Ruby
-        uses: ruby/setup-ruby@v2
+        uses: ruby/setup-ruby@v1
         with:
-          ruby-version: '3.3.4'
+          bundle-cache: true
+          cache-version: 0
+          bundler: "Gemfile.lock"
+      - name: Cache gems
+        uses: actions/cache@v3
+        with:
+          path: vendor/bundle
+          key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-gems-    
       - name: Install dependencies
-        run: |
-          gem install bundler
-          bundle install
-      # - name: Setup Pages
-      #   id: pages
-      #   uses: actions/configure-pages@main
+        run: bundle install --path vendor/bundle
       - name: Build with Jekyll
-        run: bundle exec jekyll build 
-
-        # uses: actions/jekyll-build-pages@v1
-        #with:
-          #source: ./
-          #destination: ./_site
+        run: bundle exec jekyll build --baseurl "${{ steps.pages.outputs.base_path }}"
+        env: 
+          JEKYLL_ENV: production
+      
       - name: Upload artifact
         uses: actions/upload-pages-artifact@main
-      - name: Deploy to git pages
-        uses: peaceiris/actions-gh-pages@v3
-        with: 
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./_site  # Directory where Jekyll builds the site
-          target_branch: gh-pages  # Specify the branch to deploy to
-
+      # - name: Deploy to git pages
+      #   uses: peaceiris/actions-gh-pages@v3
+      #   with: 
+      #     github_token: ${{ secrets.GITHUB_TOKEN }}
+      #     publish_dir: ./_site  # Directory where Jekyll builds the site
+      #     target_branch: gh-pages  # Specify the branch to deploy to
+    
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: macos-latest
+    needs: build
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@main
